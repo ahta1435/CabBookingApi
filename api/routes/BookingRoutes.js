@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Rider = require('../models/Rider');
 const Driver = require('../models/Driver');
 const CreateBooking = require('../models/Booking');
+const Booking = require("../models/Booking");
 
 
 //starting journey 
@@ -23,7 +24,7 @@ routes.post('/journeyStart/:riderId/:DriverId',(req,res)=>{
     
 
     const createBooking = new CreateBooking({
-        _id : new mongoose.Types.ObjectId.toString(),
+        _id : new mongoose.Types.ObjectId,
         riderId :riderId,
         driverId : driverId,
         endLocation : location,
@@ -41,7 +42,9 @@ routes.post('/journeyStart/:riderId/:DriverId',(req,res)=>{
             havingPassenger : true,
             location : location
         }
-        Driver.updateOne({_id:driverId},{$set:updateObjForDriver}).exec().then().catch();
+        Driver.updateOne({_id:driverId},{$set:updateObjForDriver}).exec().then(
+            result => res.status(200).json(result)
+        ).catch( err=>res.status(500).json(err));
 
     }).catch(err=>{
         console.log(err);
@@ -54,13 +57,12 @@ routes.post('/journeyStart/:riderId/:DriverId',(req,res)=>{
 
 
 //marking the journey as End and making the cab and rider's location same
-routes.post('/journeyEnd/:journeyId',(req,res)=>{
+routes.post('/journeyEnd/:journeyId', async (req,res)=>{
 
     let journeyId = req.params.journeyId;
 
     CreateBooking.findOne({_id:journeyId}).exec().then((doc)=>{
-        let location = doc.location;
-
+        let location = doc.endLocation;
         let driverId = doc.driverId;
         let riderId = doc.riderId;
 
@@ -76,9 +78,14 @@ routes.post('/journeyEnd/:journeyId',(req,res)=>{
     }).catch(err=>{
         console.log(err);
         res.status(500).json(err);
-    })
-    CreateBooking.updateOne({_id:journeyId},{$set:{isjourneyEnded: true}}).exec().then().catch();
+    });
 
+    CreateBooking.updateOne({_id:journeyId},{$set:{isjourneyEnded: true}}).exec()
+    .then(    
+        result => res.status(200).json(result)
+    ).catch(
+        error => res.status(500).json(error)
+    )
 })
 
 

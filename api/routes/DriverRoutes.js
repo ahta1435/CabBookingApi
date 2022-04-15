@@ -8,8 +8,6 @@ const Driver = require("../models/Driver");
 //register driver
 routes.post('/register_driver',(req,res)=>{
 
-    console.log(req.body);
-
     let x1Cord = req.body.x1; 
     let x2Cord = req.body.x2; 
     let y1Cord = req.body.y1; 
@@ -26,10 +24,10 @@ routes.post('/register_driver',(req,res)=>{
         location : location
     });
     driver.save().then(
-        result =>{
-            message : "Driver has been Created"
-        }
-    ).catch(error=>console.log(error));
+       result => res.status(200).json(result)
+    ).catch(
+        error => res.status(500).json(error)
+    );
 });
 
 routes.post('/makeUnavailable/:driverId',(req,res)=>{
@@ -41,7 +39,11 @@ routes.post('/makeUnavailable/:driverId',(req,res)=>{
         endTrip : false,
         havingPassenger :false
     }
-    Driver.updateOne({_id:driverId},{$set:updateObj}).exec().then().catch();
+    Driver.updateOne({_id:driverId},{$set:updateObj}).exec().then(
+        result => res.status(200).json(result)
+    ).catch(
+        error => res.status(roo).json(error)
+    );
 
 })
 
@@ -64,8 +66,11 @@ routes.post('/makeAvailable/:driverId',(req,res)=>{
         location:location
 
     }
-    Driver.updateOne({_id:driverId},{$set:updateObj}).exec().then().catch();
-
+    Driver.updateOne({_id:driverId},{$set:updateObj}).exec().then(
+        result => res.status(200).json(result)
+    ).catch(
+        error => res.status(roo).json(error)
+    );
 })
 
 

@@ -10,7 +10,7 @@
   "author": "AHTASHAMUL HAQUE",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.8",
     "morgan": "^1.10.0",

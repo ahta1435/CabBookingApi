@@ -8,15 +8,16 @@ mongoose.connect('mongodb://127.0.0.1:27017/',{
     dbName: 'apiDesign',
     useNewUrlParser: true,
     useUnifiedTopology: true 
-})
+});
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
 
 const riderRoutes = require('./api/routes/RiderRoutes');
 const bookingRoutes = require('./api/routes/BookingRoutes');
 const driverRoutes = require('./api/routes/DriverRoutes');
-
-app.use(bodyParser.urlencoded({extended:false}));
-app.use(bodyParser.json())
-
 
 app.use('/rider',riderRoutes);
 app.use('/booking',bookingRoutes);
