@@ -48,7 +48,7 @@ routes.post('/journeyStart/:riderId/:DriverId',(req,res)=>{
         res.status(500).json(err);
     })
 
-    Rider.updateOne({_id:riderId},{$set:{isCurrentlyRiding: true}});
+    Rider.updateOne({_id:riderId},{$set:{isCurrentlyRiding: true}}).exec().then().catch();
 
 })
 
@@ -77,7 +77,7 @@ routes.post('/journeyEnd/:journeyId',(req,res)=>{
         console.log(err);
         res.status(500).json(err);
     })
-    CreateBooking.updateOne({_id:journeyId},{$set:{isjourneyEnded: true}});
+    CreateBooking.updateOne({_id:journeyId},{$set:{isjourneyEnded: true}}).exec().then().catch();
 
 })
 
