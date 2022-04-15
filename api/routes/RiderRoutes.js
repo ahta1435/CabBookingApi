@@ -7,16 +7,15 @@ const Driver = require('../models/Driver');
 
 
 //get the cabs for current User
-routes.get('/getCabs/:riderId',(req,res)=>{
-    let id = req.params.riderId;  
-   
+routes.get('/getCabs/:id',(req,res)=>{
+    let id = req.params.id;  
     Rider.findOne({_id:id,isCurrentlyRiding:{$ne:true}}).exec().then((doc)=>{
         let distance = doc.location ;
         Driver.find({location:{$lte:distance},havingPassenger:{$ne:true}}).exec().then((doc)=>{
             if(doc.length>0){
                 res.status(200).json(doc);
             }else{
-                res.status(404).json(err);
+                res.status(404).json({"data":"No Cab found"});
             }
         })
       
@@ -28,7 +27,7 @@ routes.get('/getCabs/:riderId',(req,res)=>{
 
 //route to register rider
 routes.post('/register_rider',(req,res)=>{
-    
+
     let x1Cord = Number(req.body.x1); 
     let x2Cord = Number(req.body.x2); 
     let y1Cord = Number(req.body.y1); 
